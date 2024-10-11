@@ -37,7 +37,6 @@ const NewPrompt = ({ data }) => {
 
   const mutation = useMutation({
     mutationFn: (finalAnswer) => {
-      console.log({ answer });
       return fetch(`${import.meta.env.VITE_API_URL}/api/chats/${data._id}`, {
         method: "PUT",
         credentials: "include",
@@ -81,7 +80,6 @@ const NewPrompt = ({ data }) => {
       let accumulatedText = "";
       for await (const chunk of result.stream) {
         const chunkText = chunk.text();
-        console.log({ chunkText });
         accumulatedText += chunkText;
         setAnswer(accumulatedText);
       }
