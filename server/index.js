@@ -41,6 +41,10 @@ const imagekit = new ImageKit({
   privateKey: process.env.IMAGE_KIT_PRIVATE_KEY,
 });
 
+app.get("/api/test", (req, res) => {
+  res.status(200).json({ message: "You passed the test. SERVER RUNNING!" });
+});
+
 app.get("/api/upload", (req, res) => {
   const result = imagekit.getAuthenticationParameters();
   res.send(result);
