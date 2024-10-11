@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "react-router-dom";
 import Markdown from "react-markdown";
 import { IKImage } from "imagekitio-react";
+import { Fragment } from "react";
 
 const Chat = () => {
   const path = useLocation().pathname;
@@ -17,8 +18,6 @@ const Chat = () => {
       }).then((res) => res.json()),
   });
 
-  console.log(data);
-
   return (
     <div className="chatPage">
       <div className="wrapper">
@@ -28,7 +27,7 @@ const Chat = () => {
             : error
             ? "Something went wrong!"
             : data?.history?.map((message, i) => (
-                <>
+                <Fragment key={i}>
                   {message.img && (
                     <IKImage
                       urlEndpoint={import.meta.env.VITE_IMAGE_KIT_ENDPOINT}
@@ -38,6 +37,7 @@ const Chat = () => {
                       transformation={[{ height: 300, width: 400 }]}
                       loading="lazy"
                       lqip={{ active: true, quality: 20 }}
+                      className="message user"
                     />
                   )}
                   <div
@@ -46,9 +46,18 @@ const Chat = () => {
                     }
                     key={i}
                   >
-                    <Markdown>{message.parts[0].text}</Markdown>
+                    <div className="logo">
+                      {message.role === "model" && (
+                        <div className="model">
+                          <img src={"/logo.png"} alt="model" />
+                        </div>
+                      )}
+                      <div>
+                        <Markdown>{message.parts[0].text}</Markdown>
+                      </div>
+                    </div>
                   </div>
-                </>
+                </Fragment>
               ))}
 
           {data && <NewPrompt data={data} />}

@@ -5,10 +5,10 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Home from "./pages/home/Home";
 import Chat from "./pages/chat/Chat";
 import Dashboard from "./pages/dashboard/Dashboard";
-import SignIn from "./pages/sign-in/SignIn";
-import SignUp from "./pages/sign-up/SignUp";
 import RootLayout from "./layouts/root/RootLayout";
 import DashboardLayout from "./layouts/dashboard/DashboardLayout";
+import SignUpPage from "./pages/sign-up/SignUp";
+import SignInPage from "./pages/sign-in/SignIn";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -26,11 +26,11 @@ const router = createBrowserRouter([
       },
       {
         path: "/sign-in/*",
-        element: <SignIn />,
+        element: <SignInPage />,
       },
       {
         path: "/sign-up/*",
-        element: <SignUp />,
+        element: <SignUpPage />,
       },
       {
         element: <DashboardLayout />,

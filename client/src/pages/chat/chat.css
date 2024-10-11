@@ -13,7 +13,7 @@
     justify-content: center;
 
     .chat {
-      width: 50%;
+      width: 85%;
       display: flex;
       flex-direction: column;
       gap: 20px;
@@ -32,7 +32,37 @@
           max-width: 80%;
           align-self: flex-end;
         }
+
+        .logo {
+          display: flex;
+
+          .model {
+            background-color: #2c2937;
+            height: 40px;
+            min-width: 40px;
+            display: flex;
+            padding-top: 2px;
+            justify-content: center;
+            border-radius: 50%;
+            margin: 15px;
+
+            img {
+              height: 30px;
+              width: 30px;
+            }
+          }
+        }
       }
     }
   }
+}
+/* Hide scrollbar for Chrome, Safari and Opera */
+.wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.wrapper {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }

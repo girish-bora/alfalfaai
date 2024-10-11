@@ -17,12 +17,10 @@ const NewPrompt = ({ data }) => {
   });
 
   const chat = model.startChat({
-    history: [
-      data?.history.map(({ role, parts }) => ({
-        role,
-        parts: [{ text: parts[0].text }],
-      })),
-    ],
+    history: data?.history.map(({ role, parts }) => ({
+      role,
+      parts: [{ text: parts[0].text }],
+    })),
     generationConfig: {
       // maxOutputTokens: 100,
     },
@@ -38,7 +36,8 @@ const NewPrompt = ({ data }) => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: () => {
+    mutationFn: (finalAnswer) => {
+      console.log({ answer });
       return fetch(`${import.meta.env.VITE_API_URL}/api/chats/${data._id}`, {
         method: "PUT",
         credentials: "include",
@@ -47,7 +46,7 @@ const NewPrompt = ({ data }) => {
         },
         body: JSON.stringify({
           question: question.length ? question : undefined,
-          answer,
+          answer: finalAnswer,
           img: img.dbData?.filePath || undefined,
         }),
       }).then((res) => res.json());
@@ -82,12 +81,12 @@ const NewPrompt = ({ data }) => {
       let accumulatedText = "";
       for await (const chunk of result.stream) {
         const chunkText = chunk.text();
-        console.log(chunkText);
+        console.log({ chunkText });
         accumulatedText += chunkText;
         setAnswer(accumulatedText);
       }
 
-      mutation.mutate();
+      mutation.mutate(accumulatedText);
     } catch (err) {
       console.log(err);
     }
@@ -124,19 +123,33 @@ const NewPrompt = ({ data }) => {
           path={img.dbData?.filePath}
           width="380"
           transformation={[{ width: 380 }]}
+          className="message user"
         />
       )}
       {question && <div className="message user">{question}</div>}
       {answer && (
-        <div className="message">
-          <Markdown>{answer}</Markdown>
+        // <div className="message">
+        //   <Markdown>{answer}</Markdown>
+        // </div>
+        <div className="logo">
+            <div className="model">
+              <img src={"/logo.png"} alt="model" />
+            </div>
+          <div>
+            <Markdown>{answer}</Markdown>
+          </div>
         </div>
       )}
       <div className="endChat" ref={endRef}></div>
       <form className="newForm" onSubmit={handleSubmit} ref={formRef}>
         <Upload setImg={setImg} />
         <input id="file" type="file" multiple={false} hidden />
-        <input type="text" name="text" placeholder="Ask anything..." />
+        <input
+          type="text"
+          name="text"
+          placeholder="Ask anything..."
+          autoComplete="off"
+        />
         <button>
           <img src="/arrow.png" alt="" />
         </button>
